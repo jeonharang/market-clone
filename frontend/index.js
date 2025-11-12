@@ -8,7 +8,7 @@ const calcTime = (timeStamp) => {
   if (hour > 0) return `${hour}시간 전`;
   else if (minute > 0) return `${minute}분 전`;
   else if (second > 0) return `${minute}초 전`;
-  else `방금전`;
+  else return `방금전`;
 };
 
 const renderData = (data) => {
