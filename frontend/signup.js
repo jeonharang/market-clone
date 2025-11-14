@@ -20,18 +20,19 @@ const handleSubmit = async (event) => {
 
   if (checkPassword()) {
     const res = await fetch("/signup", {
-      method: "POST",
+      method: "post",
       body: formData,
     });
     const data = await res.json();
-
     if (data === "200") {
       div.innerText = "회원가입에 성공";
-      div.computedStyleMap.color = "blue";
+      div.style.color = "blue";
+      alert("회원가입에 성공하였습니다");
+      window.location.pathname = "/login.html";
     }
   } else {
     div.innerText = "비밀번호가 같지 않습니다";
-    div.computedStyleMap.color = "red";
+    div.style.color = "red";
   }
 };
 form.addEventListener("submit", handleSubmit);
