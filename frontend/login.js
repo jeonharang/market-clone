@@ -1,7 +1,5 @@
 const form = document.querySelector("#loginForm");
 
-let accessToken = null;
-
 const handleSubmit = async (event) => {
   event.preventDefault();
   const formData = new FormData(form);
@@ -13,10 +11,10 @@ const handleSubmit = async (event) => {
     body: formData,
   });
   const data = await res.json();
-  accessToken = data.access_token;
-
-  const infoDiv = document.querySelector("#info");
-  infoDiv.innerText = "로그인되었습니다!";
+  const accessToken = data.access_token;
+  window.localStorage.setItem("token", accessToken);
+  alert("로그인 되었습니다!");
+  window.location.pathname = "/";
 
   const btn = document.createElement("button");
   btn.innerText = "상품 가져오기";
