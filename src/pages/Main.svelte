@@ -1,6 +1,21 @@
 <script>
+  import { onMount } from "svelte";
+  import Footer from "../components/Footer.svelte";
+    import { getDatabase, ref, onValue } from "firebase/database";
     let hour = new Date().getHours();
     let min = new Date().getMinutes();
+
+    $:items =[];
+
+const db = getDatabase();
+const itemsRef = ref(db, "items/");
+onMount(()=>{
+onValue(itemsRef, (snapshot) => {
+  const data = snapshot.val();
+  items=Object.values(data);
+})
+
+});
 </script>
 
 <div class="media-info-msg">화면 사이즈를 줄여주세요.</div>
@@ -28,89 +43,17 @@
       </div>
     </header>
     <main>
-      <div class="item-list">
-        <div class="item-list__img">
-          <img src="assets/img.svg" alt="" />
-        </div>
-        <div class="item-list__info">
-          <div class="item-list__info-title">게이밍 pc 팝니다</div>
-          <div class="item-list__info-meta">역삼동 19초 전</div>
-          <div class="item-list__info-price">100만원</div>
-        </div>
+     {#each items as item}
+     <div class="item-list">
+      <div class="item-list__img" ></div>
+      <div class="item-list__info">
+        <div class="item-list__info-title">{item.title}</div>
+        <div class="item-list__info-price">{item.price}</div>
+        <div>{item.description}</div>
+        <div class="item-list__info-meta">{item.place}</div>
+     </div>
       </div>
-      <div class="item-list">
-        <div class="item-list__img">
-          <img src="assets/img.svg" alt="" />
-        </div>
-        <div class="item-list__info">
-          <div class="item-list__info-title">게이밍 pc 팝니다</div>
-          <div class="item-list__info-meta">역삼동 19초 전</div>
-          <div class="item-list__info-price">100만원</div>
-        </div>
-      </div>
-      <div class="item-list">
-        <div class="item-list__img">
-          <img src="assets/img.svg" alt="" />
-        </div>
-        <div class="item-list__info">
-          <div class="item-list__info-title">게이밍 pc 팝니다</div>
-          <div class="item-list__info-meta">역삼동 19초 전</div>
-          <div class="item-list__info-price">100만원</div>
-        </div>
-      </div>
-      <div class="item-list">
-        <div class="item-list__img">
-          <img src="assets/img.svg" alt="" />
-        </div>
-        <div class="item-list__info">
-          <div class="item-list__info-title">게이밍 pc 팝니다</div>
-          <div class="item-list__info-meta">역삼동 19초 전</div>
-          <div class="item-list__info-price">100만원</div>
-        </div>
-      </div>
-      <div class="item-list">
-        <div class="item-list__img">
-          <img src="assets/img.svg" alt="" />
-        </div>
-        <div class="item-list__info">
-          <div class="item-list__info-title">게이밍 pc 팝니다</div>
-          <div class="item-list__info-meta">역삼동 19초 전</div>
-          <div class="item-list__info-price">100만원</div>
-        </div>
-      </div>
+     {/each}
       <a class="write-btn" href="#/write">+ 글쓰기</a>
     </main>
-    <footer>
-      <div class="footer-block">
-        <div class="footer-icon">
-          <div class="footer-icons__img">
-            <img src="assets/home.svg" alt="" />
-          </div>
-          <div class="footer-icons__desc">홈</div>
-        </div>
-        <div class="footer-icon">
-          <div class="footer-icons__img">
-            <img src="assets/doc.svg" alt="" />
-          </div>
-          <div class="footer-icons__desc">동네생활</div>
-        </div>
-        <div class="footer-icon">
-          <div class="footer-icons__img">
-            <img src="assets/loca.svg" alt="" />
-          </div>
-          <div class="footer-icons__desc">내 근처</div>
-        </div>
-        <div class="footer-icon">
-          <div class="footer-icons__img">
-            <img src="assets/chat.svg" alt="" />
-          </div>
-          <div class="footer-icons__desc">채팅</div>
-        </div>
-        <div class="footer-icon">
-          <div class="footer-icons__img">
-            <img src="assets/user.svg" alt="" />
-          </div>
-          <div class="footer-icons__desc">나의 당근</div>
-        </div>
-      </div>
-    </footer>
+  <Footer location="home"/>
