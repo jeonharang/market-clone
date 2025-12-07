@@ -1,32 +1,59 @@
 <script>
 import Footer from "../components/Footer.svelte";
-
 import { getDatabase, ref, push } from "firebase/database";
-
+import { getStorage, ref as refimg, uploadBytes, getDownloadURL } from "firebase/storage";
 let title;
 let price;
 let description;
 let place;
 
-function writeUserData() {
+
+let files;
+
+function writeUserData(imgUrl) {
   const db = getDatabase();
   push(ref(db, 'items/'), {
    title,
    price,
    description,
-   place
+   place,
+   insertAt:new Date().getTime(),
+   imgUrl,
+
   });
   window.location.hash="/";
+}
+
+const storage = getStorage();
+
+
+
+
+
+
+const uploadFile =async ()=>{
+  const file= files[0];
+  const name= file.name;
+  const imgRef= refimg(storage, name);
+  await uploadBytes(imgRef, file);
+  const url= await getDownloadURL(imgRef);
+  return url;
+};
+
+const handleSubmit =async () => {
+
+  const url = await uploadFile()
+  writeUserData(url);
 }
 </script>
 
 
+<form id="write-form" on:submit|preventDefault={handleSubmit}>
 
-<form id="write-form" on:submit|preventDefault={writeUserData}>
-      <!-- <div>
+      <div>
         <label for="image">이미지</label>
-        <input type="file" id="image" name="image" />
-      </div> -->
+        <input type="file" bind:files={files} id="image" name="image" />
+      </div>
       <div>
         <label for="title">제목</label>
         <input type="text" id="title" name="title" bind:value={title}/>
